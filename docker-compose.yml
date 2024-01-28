@@ -3,11 +3,9 @@ services:
   graph-node:
     image: graphprotocol/graph-node
     ports:
-      - "8000:8000"
-      - "8001:8001"
-      - "8020:8020"
-      - "8030:8030"
-      - "8040:8040"
+      - "127.0.0.1:8000:8000" # Bind port 8000 to localhost for Nginx
+      - "127.0.0.1:8020:8020" # Bind port 8020 to localhost for Nginx
+      # Other graph-node ports are not exposed to the host to restrict external access
     depends_on:
       - ipfs
       - postgres
@@ -19,7 +17,7 @@ services:
       postgres_pass: let-me-in
       postgres_db: graph-node
       ipfs: "ipfs:5001"
-      ethereum: "mainnet:#{FLARE_RPC}"
+      ethereum: "mainnet:${FLARE_RPC}"
       GRAPH_LOG: info
   ipfs:
     image: ipfs/kubo:v0.14.0
@@ -48,3 +46,9 @@ services:
       POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx:/etc/nginx/conf.d # Custom Nginx configurations for access control and rate limiting
+    depends_on:
+      - graph-node
