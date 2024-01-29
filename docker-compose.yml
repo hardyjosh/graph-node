@@ -5,6 +5,7 @@ services:
     ports:
       - "127.0.0.1:8000:8000" # Bind port 8000 to localhost for Nginx
       - "127.0.0.1:8020:8020" # Bind port 8020 to localhost for Nginx
+      - "127.0.0.1:5001:5001" # Bind port 5001 to localhost for IPFS
       # Other graph-node ports are not exposed to the host to restrict external access
     depends_on:
       - ipfs
