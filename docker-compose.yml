@@ -2,9 +2,9 @@ version: "3"
 services:
   graph-node:
     image: graphprotocol/graph-node
-    ports:
-      - "127.0.0.1:8000:8000" # Bind port 8000 to localhost for Nginx
-      - "127.0.0.1:8020:8020" # Bind port 8020 to localhost for Nginx
+    expose:
+      - "8000" # Bind port 8000 to localhost for Nginx
+      - "8020" # Bind port 8020 to localhost for Nginx
       # Other graph-node ports are not exposed to the host to restrict external access
     depends_on:
       - ipfs
@@ -21,14 +21,14 @@ services:
       GRAPH_LOG: info
   ipfs:
     image: ipfs/kubo:v0.14.0
-    ports:
-      - "127.0.0.1:5001:5001"
+    expose:
+      - "5001"
     volumes:
       - ./data/ipfs:/data/ipfs
   postgres:
     image: postgres:14
-    ports:
-      - "127.0.0.1:5432:5432"
+    expose:
+      - "5432"
     command:
       [
         "postgres",
