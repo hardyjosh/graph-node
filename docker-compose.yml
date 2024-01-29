@@ -49,6 +49,10 @@ services:
   nginx:
     image: nginx:alpine
     volumes:
-      - ./nginx:/etc/nginx/conf.d # Custom Nginx configurations for access control and rate limiting
+      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/entrypoint.sh:/docker-entrypoint.d/entrypoint.sh
+    environment:
+      - BEARER_TOKEN=${BEARER_TOKEN}
+    command: ["/docker-entrypoint.d/entrypoint.sh"]
     depends_on:
       - graph-node
